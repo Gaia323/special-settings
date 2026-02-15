@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>白塔——白鸦之誓（前传）</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8A2BE2', // 紫色
+                        secondary: '#4682B4', // 钢蓝色
+                        accent: '#FF7F50', // 珊瑚色
+                        light: '#F0F8FF', // 爱丽丝蓝
+                        dark: '#191970', // 午夜蓝
+                    },
+                    fontFamily: {
+                        pixel: ['"Press Start 2P"', 'monospace'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { textShadow: '0 0 5px rgba(138, 43, 226, 0.5)' },
+                            '100%': { textShadow: '0 0 20px rgba(138, 43, 226, 0.8), 0 0 30px rgba(138, 43, 226, 0.6)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .text-shadow-lg {
+                text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+            }
+            .bg-pixel {
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
+            }
+            .pixel-borders {
+                box-shadow: 
+                    -4px 0 0 0 #000,
+                    4px 0 0 0 #000,
+                    0 -4px 0 0 #000,
+                    0 4px 0 0 #000;
+            }
+        }
+    </style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            background-color: #191970;
+            color: #F0F8FF;
+            font-family: 'Press Start 2P', monospace;
+            overflow: hidden;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+        
+        canvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+        
+        .pixel-button {
+            background-color: #4682B4;
+            color: #F0F8FF;
+            border: 2px solid #000;
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 
+                -2px 0 0 0 #000,
+                2px 0 0 0 #000,
+                0 -2px 0 0 #000,
+                0 2px 0 0 #000;
+        }
+        
+        .pixel-button:hover {
+            background-color: #5F9EA0;
+            transform: translateY(-2px);
+        }
+        
+        .pixel-button:active {
+            transform: translateY(2px);
+            box-shadow: 
+                -1px 0 0 0 #000,
+                1px 0 0 0 #000,
+                0 -1px 0 0 #000,
+                0 1px 0 0 #000;
+        }
+        
+        .dialogue-box {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid #8A2BE2;
+            padding: 15px;
+            border-radius: 0;
+            box-shadow: 
+                -2px 0 0 0 #000,
+                2px 0 0 0 #000,
+                0 -2px 0 0 #000,
+                0 2px 0 0 #000;
+        }
+        
+        .inventory-item {
+            width: 48px;
+            height: 48px;
+            border: 1px solid #000;
+            background-color: #4682B4;
+            transition: all 0.2s;
+        }
+        
+        .inventory-item:hover {
+            transform: scale(1.1);
+            border-color: #FF7F50;
+        }
+        
+        .menu-option {
+            background-color: #4682B4;
+            color: #F0F8FF;
+            border: 2px solid #000;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .menu-option:hover {
+            background-color: #5F9EA0;
+            transform: translateX(5px);
+        }
+        
+        .character-portrait {
+            border: 2px solid #000;
+            background-color: #191970;
+            box-shadow: 
+                -2px 0 0 0 #000,
+                2px 0 0 0 #000,
+                0 -2px 0 0 #000,
+                0 2px 0 0 #000;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-dark">
+    <!-- 游戏容器 -->
+    <div id="game-container" class="relative w-full h-screen overflow-hidden">
+        <!-- 开始界面 -->
+        <div id="start-screen" class="absolute inset-0 flex flex-col items-center justify-center bg-cover bg-center" style="background-image: url('https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/a7170bc02d874a7889706b3e73aab0db~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=CJDZVEFT2J%2BNskBXuygWTdGPvvE%3D');">
+            <div class="absolute inset-0 bg-dark bg-opacity-50"></div>
+            <div class="z-10 text-center">
+                <h1 class="text-4xl md:text-6xl font-pixel text-light mb-8 animate-glow">白塔</h1>
+                <h2 class="text-xl md:text-2xl font-pixel text-accent mb-12">白鸦之誓（前传）</h2>
+                <div class="flex flex-col gap-4 w-64 mx-auto">
+                    <button id="new-game" class="pixel-button">开始新游戏</button>
+                    <button id="load-game" class="pixel-button">读取存档</button>
+                    <button id="settings" class="pixel-button">设置</button>
+                </div>
+                <p class="mt-12 text-sm text-light opacity-70">使用 W/A/S/D 移动，空格对话，Q 拾取物品，B 打开背包</p>
+            </div>
+        </div>
+        
+        <!-- 游戏界面 -->
+        <div id="game-screen" class="absolute inset-0 hidden">
+            <!-- 游戏画布 -->
+            <canvas id="game-canvas" class="absolute inset-0 w-full h-full"></canvas>
+            
+            <!-- 设置按钮 -->
+            <button id="settings-button" class="absolute top-4 left-4 z-20 w-12 h-12 bg-secondary border-4 border-black flex items-center justify-center">
+                <i class="fa fa-cog text-2xl"></i>
+            </button>
+            
+            <!-- 对话框 -->
+            <div id="dialogue-container" class="absolute bottom-4 left-0 right-0 flex justify-center items-end px-4 z-10 hidden">
+                <!-- 角色立绘 -->
+                <div id="character-portrait" class="character-portrait absolute left-4 bottom-0 w-32 h-48 bg-contain bg-center bg-no-repeat hidden"></div>
+                
+                <!-- 对话框 -->
+                <div class="dialogue-box ml-36 w-full max-w-3xl">
+                    <div id="dialogue-speaker" class="text-accent mb-2 text-sm"></div>
+                    <div id="dialogue-text" class="text-light mb-4 text-sm"></div>
+                    <div id="dialogue-choices" class="flex flex-col gap-2 hidden">
+                        <!-- 选择项将通过JS动态添加 -->
+                    </div>
+                    <div id="dialogue-continue" class="text-right text-xs text-light opacity-70 mt-2">按空格键继续...</div>
+                </div>
+            </div>
+            
+            <!-- 背包界面 -->
+            <div id="inventory-container" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20 hidden">
+                <div class="bg-dark border-4 border-black p-6 w-full max-w-4xl">
+                    <h2 class="text-accent text-xl mb-4">背包</h2>
+                    <div id="inventory-grid" class="grid grid-cols-5 gap-4">
+                        <!-- 物品将通过JS动态添加 -->
+                    </div>
+                    <div class="text-center mt-6 text-sm">按 B 键关闭背包</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 设置菜单 -->
+        <div id="settings-menu" class="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center z-30 hidden">
+            <div class="bg-dark border-4 border-black p-6 w-full max-w-md">
+                <h2 class="text-accent text-xl mb-6 text-center">设置</h2>
+                <div class="flex flex-col gap-4">
+                    <button id="save-game" class="menu-option">保存游戏</button>
+                    <button id="load-game-menu" class="menu-option">读取存档</button>
+                    <button id="return-to-title" class="menu-option">返回标题</button>
+                    <button id="close-settings" class="menu-option">关闭</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 结算界面 -->
+        <div id="result-screen" class="absolute inset-0 bg-dark flex flex-col items-center justify-center z-40 hidden">
+            <div class="text-center p-8 border-4 border-primary">
+                <h2 id="result-title" class="text-3xl mb-6"></h2>
+                <p id="result-message" class="mb-8 text-lg"></p>
+                <div class="flex flex-col gap-4">
+                    <button id="result-continue" class="pixel-button">继续</button>
+                    <button id="result-restart" class="pixel-button">重新开始</button>
+                    <button id="result-title" class="pixel-button">返回标题</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        const gameState = {
+            currentScreen: 'start',
+            inventory: [],
+            flags: {},
+            characterPosition: { x: 0, y: 0 },
+            currentMap: 'tower_entrance',
+            currentDialogue: null,
+            dialogueIndex: 0,
+            dialogueSpeed: 30, // 字符显示速度（毫秒）
+            dialogueTimer: null,
+            showingText: false,
+            currentText: '',
+            fullText: '',
+            showChoices: false,
+            saveSlots: [null, null, null], // 三个存档槽
+            playerName: '旅行者'
+        };
+        
+        // 游戏地图数据
+        const maps = {
+            tower_entrance: {
+                name: '白塔入口',
+                background: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/576b06ce8063487383fa58f3843a212d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215180533CBB986758BCF974C2297&rrcfp=f06b921b&x-expires=1773741963&x-signature=d2yqf8D0VGPoiODYyml6UdMLLUA%3D',
+                characters: [
+                    {
+                        name: '守塔人诺',
+                        position: { x: 400, y: 300 },
+                        portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/e985d67853f5426fbaabea5e22056558~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=1B3R52Bj7sNB%2FR14Pn4eYhVzjXc%3D',
+                        dialogue: 'intro'
+                    }
+                ],
+                items: [
+                    {
+                        name: '金币',
+                        position: { x: 200, y: 200 },
+                        image: 'https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/294c6e0dd85f44b49d6418c21fca8a66~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026021517423615B03A1CEFF9DE525B62&rrcfp=f06b921b&x-expires=1773740566&x-signature=4yK%2Bwf25UMIU%2Bvat2PacvudrCkU%3D',
+                        collected: false
+                    }
+                ]
+            },
+            tower_floor1: {
+                name: '白塔一层',
+                background: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/576b06ce8063487383fa58f3843a212d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215180533CBB986758BCF974C2297&rrcfp=f06b921b&x-expires=1773741963&x-signature=d2yqf8D0VGPoiODYyml6UdMLLUA%3D',
+                characters: [
+                    {
+                        name: '神秘孩子',
+                        position: { x: 300, y: 250 },
+                        portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/b194541b098441f5ae4f0a8682c5f952~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=XcN3SjXfp%2F2NAAvNOmzCjzcRy%2BI%3D',
+                        dialogue: 'child_meeting'
+                    }
+                ],
+                items: [
+                    {
+                        name: '火火果',
+                        position: { x: 150, y: 150 },
+                        image: 'https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/ea5e8f499908496e8c5e47ceabd35165~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026021517423615B03A1CEFF9DE525B62&rrcfp=f06b921b&x-expires=1773740565&x-signature=2FNMJy99NY%2BU1hi%2FmDWZ%2Fo76B90%3D',
+                        collected: false
+                    }
+                ]
+            },
+            tower_floor2: {
+                name: '白塔二层',
+                background: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/576b06ce8063487383fa58f3843a212d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215180533CBB986758BCF974C2297&rrcfp=f06b921b&x-expires=1773741963&x-signature=d2yqf8D0VGPoiODYyml6UdMLLUA%3D',
+                characters: [
+                    {
+                        name: '卡斯符',
+                        position: { x: 450, y: 300 },
+                        portrait: 'https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/baab9cd34bc049d29420dd8781788689~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741409&x-signature=hhWx2Fb2UUrY3hviBmPed7WngNY%3D',
+                        dialogue: 'kass_meeting'
+                    }
+                ],
+                items: [
+                    {
+                        name: '魔法手环',
+                        position: { x: 250, y: 200 },
+                        image: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/396a0cdfcd964abdaa28d5d888a16a1b~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026021517423615B03A1CEFF9DE525B62&rrcfp=f06b921b&x-expires=1773740566&x-signature=xfqIeKLMU1lvNxhFUCjMyVutv1c%3D',
+                        collected: false
+                    }
+                ]
+            },
+            tower_floor3: {
+                name: '白塔三层',
+                background: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/576b06ce8063487383fa58f3843a212d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215180533CBB986758BCF974C2297&rrcfp=f06b921b&x-expires=1773741963&x-signature=d2yqf8D0VGPoiODYyml6UdMLLUA%3D',
+                characters: [
+                    {
+                        name: '神父',
+                        position: { x: 400, y: 200 },
+                        portrait: 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/34237dc2bb214e3082e547753e88d396~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=MEPI5nWy1qhyP7eEP%2BM7BmN9EB8%3D',
+                        dialogue: 'priest_meeting'
+                    }
+                ],
+                items: [
+                    {
+                        name: '魔法教学书',
+                        position: { x: 200, y: 250 },
+                        image: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/757edf4150604768bc7a99b6db728d0b~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026021517423615B03A1CEFF9DE525B62&rrcfp=f06b921b&x-expires=1773740566&x-signature=Q%2FhmExh9jHjCwu8cg4l6wW1f%2BSw%3D',
+                        collected: false
+                    }
+                ]
+            }
+        };
+        
+        // 对话数据
+        const dialogues = {
+            intro: [
+                {
+                    speaker: '守塔人诺',
+                    text: '欢迎来到白塔，年轻的旅行者。我是诺，这座塔的守护者。你是谁？为什么会出现在这里？',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/e985d67853f5426fbaabea5e22056558~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=1B3R52Bj7sNB%2FR14Pn4eYhVzjXc%3D',
+                    choices: [
+                        {
+                            text: '我是来寻找真相的。',
+                            action: () => {
+                                gameState.flags.truthSeeker = true;
+                                startDialogue('intro_response1');
+                            }
+                        },
+                        {
+                            text: '我迷路了，能告诉我这是哪里吗？',
+                            action: () => {
+                                gameState.flags.confused = true;
+                                startDialogue('intro_response2');
+                            }
+                        },
+                        {
+                            text: '（保持沉默）',
+                            action: () => {
+                                gameState.flags.silent = true;
+                                startDialogue('intro_response3');
+                            }
+                        }
+                    ]
+                }
+            ],
+            intro_response1: [
+                {
+                    speaker: '守塔人诺',
+                    text: '真相...有趣的回答。这座白塔隐藏着许多秘密，年轻人。但真相往往是双刃剑，它可能会伤害到那些还没有准备好接受它的人。',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/e985d67853f5426fbaabea5e22056558~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=1B3R52Bj7sNB%2FR14Pn4eYhVzjXc%3D',
+                    choices: [
+                        {
+                            text: '我已经准备好了。',
+                            action: () => {
+                                gameState.flags.determined = true;
+                                startDialogue('intro_response1_1');
+                            }
+                        },
+                        {
+                            text: '什么意思？你知道些什么？',
+                            action: () => {
+                                gameState.flags.curious = true;
+                                startDialogue('intro_response1_2');
+                            }
+                        }
+                    ]
+                }
+            ],
+            intro_response1_1: [
+                {
+                    speaker: '守塔人诺',
+                    text: '勇气可嘉。但在白塔中，准备好不仅仅是心理上的。你需要力量，智慧，以及最重要的——一颗纯洁的心。',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/e985d67853f5426fbaabea5e22056558~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=1B3R52Bj7sNB%2FR14Pn4eYhVzjXc%3D',
+                    choices: [
+                        {
+                            text: '我会证明自己的。',
+                            action: () => {
+                                gameState.flags.prove = true;
+                                startDialogue('intro_response1_1_1');
+                            }
+                        }
+                    ]
+                }
+            ],
+            intro_response1_1_1: [
+                {
+                    speaker: '守塔人诺',
+                    text: '很好。在开始你的旅程之前，我应该告诉你关于这个地方的一些事情。白塔是连接不同世界的门户，它的每一层都代表着一个不同的试炼。',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/e985d67853f5426fbaabea5e22056558~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=1B3R52Bj7sNB%2FR14Pn4eYhVzjXc%3D',
+                    choices: [
+                        {
+                            text: '试炼？我需要做什么？',
+                            action: () => {
+                                startDialogue('intro_response1_1_1_1');
+                            }
+                        }
+                    ]
+                }
+            ],
+            intro_response1_1_1_1: [
+                {
+                    speaker: '守塔人诺',
+                    text: '每一层都有一个守护者，你需要通过他们的考验才能继续向上。但要小心，试炼不仅仅是战斗，有时候，理解和同情比力量更重要。',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/e985d67853f5426fbaabea5e22056558~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=1B3R52Bj7sNB%2FR14Pn4eYhVzjXc%3D',
+                    choices: [
+                        {
+                            text: '我明白了，我会小心的。',
+                            action: () => {
+                                addItemToInventory('魔法项链', 'https://p26-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/bec2a6de556642088b46fac61b3fa580~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026021517423615B03A1CEFF9DE525B62&rrcfp=f06b921b&x-expires=1773740566&x-signature=GQJTLmjjSX%2Bqk2UvCbgnaI5Ldec%3D');
+                                gameState.currentMap = 'tower_floor1';
+                                hideDialogue();
+                                drawGame();
+                            }
+                        }
+                    ]
+                }
+            ],
+            // 其他对话数据...
+            child_meeting: [
+                {
+                    speaker: '神秘孩子',
+                    text: '你...你能看到我？',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/b194541b098441f5ae4f0a8682c5f952~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=XcN3SjXfp%2F2NAAvNOmzCjzcRy%2BI%3D',
+                    choices: [
+                        {
+                            text: '是的，我能看到你。你是谁？',
+                            action: () => {
+                                startDialogue('child_response1');
+                            }
+                        },
+                        {
+                            text: '你就是传说中的"界"吗？',
+                            action: () => {
+                                startDialogue('child_response2');
+                            }
+                        }
+                    ]
+                }
+            ],
+            child_response1: [
+                {
+                    speaker: '神秘孩子',
+                    text: '我...我不知道。我不记得我是谁，也不记得我从哪里来。我只知道我醒来的时候就在这座塔里，而且其他人都看不到我。',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/b194541b098441f5ae4f0a8682c5f952~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=XcN3SjXfp%2F2NAAvNOmzCjzcRy%2BI%3D',
+                    choices: [
+                        {
+                            text: '别害怕，我会帮助你的。',
+                            action: () => {
+                                gameState.flags.comfortChild = true;
+                                startDialogue('child_response1_1');
+                            }
+                        },
+                        {
+                            text: '为什么其他人看不到你？',
+                            action: () => {
+                                startDialogue('child_response1_2');
+                            }
+                        }
+                    ]
+                }
+            ],
+            child_response1_1: [
+                {
+                    speaker: '神秘孩子',
+                    text: '谢谢你...你是第一个对我这么好的人。也许...也许我们可以一起探索这座塔？我感觉我在这里有什么使命要完成。',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/b194541b098441f5ae4f0a8682c5f952~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=XcN3SjXfp%2F2NAAvNOmzCjzcRy%2BI%3D',
+                    choices: [
+                        {
+                            text: '好的，我们一起。',
+                            action: () => {
+                                gameState.flags.childCompanion = true;
+                                gameState.currentMap = 'tower_floor2';
+                                hideDialogue();
+                                drawGame();
+                            }
+                        }
+                    ]
+                }
+            ],
+            // 更多对话数据...
+            kass_meeting: [
+                {
+                    speaker: '守塔人诺',
+                    text: '小心！这一层的守护者是卡斯符，一个曾经是人类小孩的怪物。他因为好奇而闯入塔中，没能通过试炼，被变成了现在这个样子。',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/e985d67853f5426fbaabea5e22056558~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=1B3R52Bj7sNB%2FR14Pn4eYhVzjXc%3D',
+                    choices: [
+                        {
+                            text: '我必须帮助他。',
+                            action: () => {
+                                gameState.flags.wantToHelpKass = true;
+                                startDialogue('kass_response1');
+                            }
+                        },
+                        {
+                            text: '我该如何击败他？',
+                            action: () => {
+                                gameState.flags.prepareToFight = true;
+                                startDialogue('kass_response2');
+                            }
+                        }
+                    ]
+                }
+            ],
+            kass_response1: [
+                {
+                    speaker: '守塔人诺',
+                    text: '击败不是解决问题的方法。卡斯符需要的是理解和同情，而不是战斗。试着与他沟通，找出他内心深处的痛苦。',
+                    portrait: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/e985d67853f5426fbaabea5e22056558~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741411&x-signature=1B3R52Bj7sNB%2FR14Pn4eYhVzjXc%3D',
+                    choices: [
+                        {
+                            text: '我会尝试与他沟通。',
+                            action: () => {
+                                gameState.flags.willCommunicate = true;
+                                startDialogue('kass_approach');
+                            }
+                        }
+                    ]
+                }
+            ],
+            kass_approach: [
+                {
+                    speaker: '卡斯符',
+                    text: '（咆哮）滚开！你们都想伤害我！',
+                    portrait: 'https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/baab9cd34bc049d29420dd8781788689~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741409&x-signature=hhWx2Fb2UUrY3hviBmPed7WngNY%3D',
+                    choices: [
+                        {
+                            text: '我不想伤害你，我想帮助你。',
+                            action: () => {
+                                startDialogue('kass_trust');
+                            }
+                        }
+                    ]
+                }
+            ],
+            kass_trust: [
+                {
+                    speaker: '卡斯符',
+                    text: '（停顿）你...你真的想帮助我？',
+                    portrait: 'https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/baab9cd34bc049d29420dd8781788689~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741409&x-signature=hhWx2Fb2UUrY3hviBmPed7WngNY%3D',
+                    choices: [
+                        {
+                            text: '是的，我会帮你找到变回人类的方法。',
+                            action: () => {
+                                gameState.flags.promiseToHelpKass = true;
+                                addItemToInventory('魔法手环', 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/396a0cdfcd964abdaa28d5d888a16a1b~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026021517423615B03A1CEFF9DE525B62&rrcfp=f06b921b&x-expires=1773740566&x-signature=xfqIeKLMU1lvNxhFUCjMyVutv1c%3D');
+                                gameState.currentMap = 'tower_floor3';
+                                hideDialogue();
+                                drawGame();
+                            }
+                        }
+                    ]
+                }
+            ],
+            // 神父对话
+            priest_meeting: [
+                {
+                    speaker: '神父',
+                    text: '欢迎来到信仰之层，旅行者。我是这一层的守护者，神父。你来到这里是为了什么？',
+                    portrait: 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/34237dc2bb214e3082e547753e88d396~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=MEPI5nWy1qhyP7eEP%2BM7BmN9EB8%3D',
+                    choices: [
+                        {
+                            text: '我是来寻找真相的。',
+                            action: () => {
+                                startDialogue('priest_response1');
+                            }
+                        },
+                        {
+                            text: '我是来通过试炼的。',
+                            action: () => {
+                                startDialogue('priest_response2');
+                            }
+                        }
+                    ]
+                }
+            ],
+            priest_response1: [
+                {
+                    speaker: '神父',
+                    text: '真相？有趣的追求。但请记住，真相往往是主观的，它取决于我们的信仰和视角。你认为什么是真相？',
+                    portrait: 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/34237dc2bb214e3082e547753e88d396~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=MEPI5nWy1qhyP7eEP%2BM7BmN9EB8%3D',
+                    choices: [
+                        {
+                            text: '真相是客观存在的，无论我们是否相信。',
+                            action: () => {
+                                startDialogue('priest_truth1');
+                            }
+                        },
+                        {
+                            text: '真相是我们选择相信的东西。',
+                            action: () => {
+                                startDialogue('priest_truth2');
+                            }
+                        }
+                    ]
+                }
+            ],
+            priest_truth1: [
+                {
+                    speaker: '神父',
+                    text: '一个理性的回答。但即使是最客观的事实，也会因为我们的感知和理解而有所不同。你如何确定你的感知是准确的？',
+                    portrait: 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/34237dc2bb214e3082e547753e88d396~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=MEPI5nWy1qhyP7eEP%2BM7BmN9EB8%3D',
+                    choices: [
+                        {
+                            text: '通过验证和证据。',
+                            action: () => {
+                                startDialogue('priest_evidence');
+                            }
+                        }
+                    ]
+                }
+            ],
+            priest_evidence: [
+                {
+                    speaker: '神父',
+                    text: '验证和证据...是的，这是科学的方法。但有些事情是无法通过科学方法来验证的，比如爱、希望和信仰。这些东西是否就不真实？',
+                    portrait: 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/34237dc2bb214e3082e547753e88d396~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215175640B20CF04AEFECD63E6C38&rrcfp=f06b921b&x-expires=1773741410&x-signature=MEPI5nWy1qhyP7eEP%2BM7BmN9EB8%3D',
+                    choices: [
+                        {
+                            text: '它们是真实的，因为我们能感受到它们。',
+                            action: () => {
+                                gameState.flags.understandFaith = true;
+                                addItemToInventory('魔法教学书', 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/757edf4150604768bc7a99b6db728d0b~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026021517423615B03A1CEFF9DE525B62&rrcfp=f06b921b&x-expires=1773740566&x-signature=Q%2FhmExh9jHjCwu8cg4l6wW1f%2BSw%3D');
+                                showResult('成功', '恭喜你完成了白塔的试炼！你展示了勇气、智慧、同情、理解和对信仰的理解。虽然这只是游戏的第一章，但你已经迈出了成为真正英雄的第一步。在未来的旅程中，你将继续探索白塔的秘密，寻找那个神秘的橘色头发孩子，并最终揭开"界"的真相。');
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+        
+        // DOM元素
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const gameCanvas = document.getElementById('game-canvas');
+        const ctx = gameCanvas.getContext('2d');
+        const settingsButton = document.getElementById('settings-button');
+        const settingsMenu = document.getElementById('settings-menu');
+        const dialogueContainer = document.getElementById('dialogue-container');
+        const characterPortrait = document.getElementById('character-portrait');
+        const dialogueSpeaker = document.getElementById('dialogue-speaker');
+        const dialogueText = document.getElementById('dialogue-text');
+        const dialogueChoices = document.getElementById('dialogue-choices');
+        const dialogueContinue = document.getElementById('dialogue-continue');
+        const inventoryContainer = document.getElementById('inventory-container');
+        const inventoryGrid = document.getElementById('inventory-grid');
+        const resultScreen = document.getElementById('result-screen');
+        const resultTitle = document.getElementById('result-title');
+        const resultMessage = document.getElementById('result-message');
+        
+        // 按钮事件监听器
+        document.getElementById('new-game').addEventListener('click', startNewGame);
+        document.getElementById('load-game').addEventListener('click', showLoadGame);
+        document.getElementById('settings').addEventListener('click', showSettings);
+        settingsButton.addEventListener('click', showSettings);
+        document.getElementById('close-settings').addEventListener('click', hideSettings);
+        document.getElementById('save-game').addEventListener('click', saveGame);
+        document.getElementById('load-game-menu').addEventListener('click', showLoadGame);
+        document.getElementById('return-to-title').addEventListener('click', returnToTitle);
+        document.getElementById('result-continue').addEventListener('click', continueGame);
+        document.getElementById('result-restart').addEventListener('click', restartGame);
+        document.getElementById('result-title').addEventListener('click', returnToTitle);
+        
+        // 键盘控制
+        const keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            q: false,
+            b: false,
+            space: false
+        };
+        
+        document.addEventListener('keydown', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                    keys.w = true;
+                    break;
+                case 'a':
+                    keys.a = true;
+                    break;
+                case 's':
+                    keys.s = true;
+                    break;
+                case 'd':
+                    keys.d = true;
+                    break;
+                case 'q':
+                    keys.q = true;
+                    pickUpItem();
+                    break;
+                case 'b':
+                    keys.b = true;
+                    toggleInventory();
+                    break;
+                case ' ':
+                    keys.space = true;
+                    handleSpacePress();
+                    break;
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                    keys.w = false;
+                    break;
+                case 'a':
+                    keys.a = false;
+                    break;
+                case 's':
+                    keys.s = false;
+                    break;
+                case 'd':
+                    keys.d = false;
+                    break;
+                case 'q':
+                    keys.q = false;
+                    break;
+                case 'b':
+                    keys.b = false;
+                    break;
+                case ' ':
+                    keys.space = false;
+                    break;
+            }
+        });
+        
+        // 初始化游戏
+        function initGame() {
+            // 设置画布尺寸
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 加载存档
+            loadSaveSlots();
+        }
+        
+        // 调整画布尺寸
+        function resizeCanvas() {
+            gameCanvas.width = window.innerWidth;
+            gameCanvas.height = window.innerHeight;
+            
+            if (gameState.currentScreen === 'game') {
+                drawGame();
+            }
+        }
+        
+        // 开始新游戏
+        function startNewGame() {
+            // 重置游戏状态
+            gameState.currentScreen = 'game';
+            gameState.inventory = [];
+            gameState.flags = {};
+            gameState.characterPosition = { x: 100, y: 300 };
+            gameState.currentMap = 'tower_entrance';
+            gameState.currentDialogue = null;
+            gameState.dialogueIndex = 0;
+            
+            // 显示游戏界面
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            
+            // 绘制游戏
+            drawGame();
+            
+            // 开始对话
+            setTimeout(() => {
+                startDialogue('intro');
+            }, 1000);
+        }
+        
+        // 绘制游戏
+        function drawGame() {
+            // 清空画布
+            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // 获取当前地图
+            const map = maps[gameState.currentMap];
+            if (!map) return;
+            
+            // 绘制背景
+            const background = new Image();
+            background.src = map.background;
+            ctx.drawImage(background, 0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // 绘制物品
+            map.items.forEach(item => {
+                if (!item.collected) {
+                    const itemImg = new Image();
+                    itemImg.src = item.image;
+                    ctx.drawImage(itemImg, item.position.x, item.position.y, 48, 48);
+                }
+            });
+            
+            // 绘制角色
+            map.characters.forEach(character => {
+                const charImg = new Image();
+                charImg.src = character.portrait;
+                ctx.drawImage(charImg, character.position.x, character.position.y, 64, 64);
+            });
+            
+            // 绘制玩家
+            const playerImg = new Image();
+            playerImg.src = 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/394e9b8ffef34009b7018eae58c609b9~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260215180533CBB986758BCF974C2297&rrcfp=f06b921b&x-expires=1773741953&x-signature=zAYRg%2BG%2F1nG1JpLN0u%2FtArprb%2B8%3D';
+            ctx.drawImage(playerImg, gameState.characterPosition.x, gameState.characterPosition.y, 32, 48);
+        }
+        
+        // 更新游戏
+        function updateGame() {
+            // 检查是否显示对话框
+            if (gameState.currentDialogue) return;
+            
+            // 移动玩家
+            const moveSpeed = 3;
+            if (keys.w) gameState.characterPosition.y -= moveSpeed;
+            if (keys.s) gameState.characterPosition.y += moveSpeed;
+            if (keys.a) gameState.characterPosition.x -= moveSpeed;
+            if (keys.d) gameState.characterPosition.x += moveSpeed;
+            
+            // 边界检查
+            if (gameState.characterPosition.x < 0) gameState.characterPosition.x = 0;
+            if (gameState.characterPosition.x > gameCanvas.width - 32) gameState.characterPosition.x = gameCanvas.width - 32;
+            if (gameState.characterPosition.y < 0) gameState.characterPosition.y = 0;
+            if (gameState.characterPosition.y > gameCanvas.height - 48) gameState.characterPosition.y = gameCanvas.height - 48;
+            
+            // 检查与NPC的互动
+            checkCharacterInteraction();
+            
+            // 重绘游戏
+            drawGame();
+            
+            // 继续游戏循环
+            requestAnimationFrame(updateGame);
+        }
+        
+        // 检查与NPC的互动
+        function checkCharacterInteraction() {
+            const map = maps[gameState.currentMap];
+            if (!map) return;
+            
+            map.characters.forEach(character => {
+                const distance = Math.sqrt(
+                    Math.pow(gameState.characterPosition.x - character.position.x, 2) +
+                    Math.pow(gameState.characterPosition.y - character.position.y, 2)
+                );
+                
+                if (distance < 80 && keys.space) {
+                    startDialogue(character.dialogue);
+                }
+            });
+        }
+        
+        // 拾取物品
+        function pickUpItem() {
+            const map = maps[gameState.currentMap];
+            if (!map) return;
+            
+            map.items.forEach(item => {
+                if (item.collected) return;
+                
+                const distance = Math.sqrt(
+                    Math.pow(gameState.characterPosition.x - item.position.x, 2) +
+                    Math.pow(gameState.characterPosition.y - item.position.y, 2)
+                );
+                
+                if (distance < 60) {
+                    item.collected = true;
+                    addItemToInventory(item.name, item.image);
+                    drawGame();
+                }
+            });
+        }
+        
+        // 添加物品到背包
+        function addItemToInventory(name, image) {
+            gameState.inventory.push({ name, image });
+            updateInventoryDisplay();
+        }
+        
+        // 更新背包显示
+        function updateInventoryDisplay() {
+            inventoryGrid.innerHTML = '';
+            
+            // 添加物品
+            gameState.inventory.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'inventory-item bg-contain bg-center bg-no-repeat';
+                itemElement.style.backgroundImage = `url(${item.image})`;
+                itemElement.title = item.name;
+                inventoryGrid.appendChild(itemElement);
+            });
+            
+            // 添加空槽位
+            const emptySlots = 20 - gameState.inventory.length;
+            for (let i = 0; i < emptySlots; i++) {
+                const emptySlot = document.createElement('div');
+                emptySlot.className = 'inventory-item bg-secondary bg-opacity-30';
+                inventoryGrid.appendChild(emptySlot);
+            }
+        }
+        
+        // 切换背包显示
+        function toggleInventory() {
+            if (inventoryContainer.classList.contains('hidden')) {
+                inventoryContainer.classList.remove('hidden');
+                updateInventoryDisplay();
+            } else {
+                inventoryContainer.classList.add('hidden');
+            }
+        }
+        
+        // 开始对话
+        function startDialogue(dialogueName) {
+            const dialogue = dialogues[dialogueName];
+            if (!dialogue) return;
+            
+            gameState.currentDialogue = dialogue;
+            gameState.dialogueIndex = 0;
+            gameState.showChoices = false;
+            
+            showCurrentDialogue();
+        }
+        
+        // 显示当前对话
+        function showCurrentDialogue() {
+            if (!gameState.currentDialogue || gameState.dialogueIndex >= gameState.currentDialogue.length) {
+                hideDialogue();
+                return;
+            }
+            
+            const dialogue = gameState.currentDialogue[gameState.dialogueIndex];
+            
+            // 显示对话框
+            dialogueContainer.classList.remove('hidden');
+            
+            // 显示角色立绘
+            if (dialogue.portrait) {
+                characterPortrait.style.backgroundImage = `url(${dialogue.portrait})`;
+                characterPortrait.classList.remove('hidden');
+            } else {
+                characterPortrait.classList.add('hidden');
+            }
+            
+            // 显示说话者
+            dialogueSpeaker.textContent = dialogue.speaker;
+            
+            // 显示文本（打字机效果）
+            gameState.fullText = dialogue.text;
+            gameState.currentText = '';
+            gameState.showingText = true;
+            
+            // 清除之前的计时器
+            if (gameState.dialogueTimer) {
+                clearInterval(gameState.dialogueTimer);
+            }
+            
+            // 设置打字机效果
+            let charIndex = 0;
+            gameState.dialogueTimer = setInterval(() => {
+                if (charIndex < gameState.fullText.length) {
+                    gameState.currentText += gameState.fullText.charAt(charIndex);
+                    dialogueText.textContent = gameState.currentText;
+                    charIndex++;
+                } else {
+                    clearInterval(gameState.dialogueTimer);
+                    gameState.showingText = false;
+                    
+                    // 显示选择项
+                    if (dialogue.choices && dialogue.choices.length > 0) {
+                        showChoices(dialogue.choices);
+                    } else {
+                        // 显示继续提示
+                        dialogueContinue.classList.remove('hidden');
+                    }
+                }
+            }, gameState.dialogueSpeed);
+        }
+        
+        // 显示选择项
+        function showChoices(choices) {
+            dialogueChoices.innerHTML = '';
+            dialogueChoices.classList.remove('hidden');
+            dialogueContinue.classList.add('hidden');
+            gameState.showChoices = true;
+            
+            choices.forEach((choice, index) => {
+                const choiceElement = document.createElement('div');
+                choiceElement.className = 'menu-option text-sm';
+                choiceElement.textContent = choice.text;
+                choiceElement.addEventListener('click', choice.action);
+                dialogueChoices.appendChild(choiceElement);
+            });
+        }
+        
+        // 隐藏对话框
+        function hideDialogue() {
+            dialogueContainer.classList.add('hidden');
+            gameState.currentDialogue = null;
+            gameState.dialogueIndex = 0;
+            
+            // 继续游戏循环
+            requestAnimationFrame(updateGame);
+        }
+        
+        // 处理空格键按下
+        function handleSpacePress() {
+            // 如果正在显示文本，直接显示全部文本
+            if (gameState.showingText) {
+                clearInterval(gameState.dialogueTimer);
+                gameState.currentText = gameState.fullText;
+                dialogueText.textContent = gameState.currentText;
+                gameState.showingText = false;
+                
+                const dialogue = gameState.currentDialogue[gameState.dialogueIndex];
+                
+                // 显示选择项
+                if (dialogue.choices && dialogue.choices.length > 0) {
+                    showChoices(dialogue.choices);
+                } else {
+                    // 显示继续提示
+                    dialogueContinue.classList.remove('hidden');
+                }
+                return;
+            }
+            
+            // 如果显示选择项，不做处理
+            if (gameState.showChoices) {
+                return;
+            }
+            
+            // 如果对话框打开但没有选择项，继续下一段对话
+            if (gameState.currentDialogue) {
+                gameState.dialogueIndex++;
+                showCurrentDialogue();
+                return;
+            }
+        }
+        
+        // 显示设置菜单
+        function showSettings() {
+            settingsMenu.classList.remove('hidden');
+        }
+        
+        // 隐藏设置菜单
+        function hideSettings() {
+            settingsMenu.classList.add('hidden');
+        }
+        
+        // 保存游戏
+        function saveGame() {
+            // 创建存档数据
+            const saveData = {
+                playerName: gameState.playerName,
+                currentMap: gameState.currentMap,
+                characterPosition: gameState.characterPosition,
+                inventory: gameState.inventory,
+                flags: gameState.flags,
+                timestamp: new Date().toISOString()
+            };
+            
+            // 显示存档槽选择
+            const saveSlots = document.createElement('div');
+            saveSlots.className = 'flex flex-col gap-4 mt-6';
+            
+            for (let i = 0; i < 3; i++) {
+                const slot = document.createElement('button');
+                slot.className = 'menu-option';
+                
+                if (gameState.saveSlots[i]) {
+                    const saveDate = new Date(gameState.saveSlots[i].timestamp);
+                    slot.textContent = `存档 ${i+1}: ${gameState.saveSlots[i].playerName} (${saveDate.toLocaleString()})`;
+                } else {
+                    slot.textContent = `存档 ${i+1}: 空`;
+                }
+                
+                slot.addEventListener('click', () => {
+                    gameState.saveSlots[i] = saveData;
+                    localStorage.setItem('whiteTowerSaveSlots', JSON.stringify(gameState.saveSlots));
+                    alert(`游戏已保存到存档槽 ${i+1}`);
+                    hideSettings();
+                });
+                
+                saveSlots.appendChild(slot);
+            }
+            
+            // 替换设置菜单内容
+            settingsMenu.querySelector('.flex.flex-col').innerHTML = '';
+            settingsMenu.querySelector('.flex.flex-col').appendChild(saveSlots);
+            
+            // 添加返回按钮
+            const backButton = document.createElement('button');
+            backButton.className = 'menu-option mt-4';
+            backButton.textContent = '返回';
+            backButton.addEventListener('click', showSettings);
+            settingsMenu.querySelector('.flex.flex-col').appendChild(backButton);
+        }
+        
+        // 显示读档界面
+        function showLoadGame() {
+            // 显示存档槽选择
+            const loadSlots = document.createElement('div');
+            loadSlots.className = 'flex flex-col gap-4 mt-6';
+            
+            let hasSaves = false;
+            
+            for (let i = 0; i < 3; i++) {
+                const slot = document.createElement('button');
+                slot.className = 'menu-option';
+                
+                if (gameState.saveSlots[i]) {
+                    hasSaves = true;
+                    const saveDate = new Date(gameState.saveSlots[i].timestamp);
+                    slot.textContent = `存档 ${i+1}: ${gameState.saveSlots[i].playerName} (${saveDate.toLocaleString()})`;
+                    slot.addEventListener('click', () => {
+                        loadGame(i);
+                    });
+                } else {
+                    slot.textContent = `存档 ${i+1}: 空`;
+                    slot.disabled = true;
+                    slot.classList.add('opacity-50');
+                }
+                
+                loadSlots.appendChild(slot);
+            }
+            
+            if (!hasSaves) {
+                const noSaves = document.createElement('div');
+                noSaves.className = 'text-center text-light mt-4';
+                noSaves.textContent = '没有可用的存档';
+                loadSlots.appendChild(noSaves);
+            }
+            
+            // 替换菜单内容
+            const menuContent = document.createElement('div');
+            menuContent.className = 'flex flex-col gap-4';
+            
+            const title = document.createElement('h2');
+            title.className = 'text-accent text-xl mb-6 text-center';
+            title.textContent = '读取存档';
+            menuContent.appendChild(title);
+            
+            menuContent.appendChild(loadSlots);
+            
+            // 添加返回按钮
+            const backButton = document.createElement('button');
+            backButton.className = 'menu-option mt-4';
+            backButton.textContent = '返回';
+            backButton.addEventListener('click', () => {
+                if (gameState.currentScreen === 'start') {
+                    startScreen.classList.remove('hidden');
+                    settingsMenu.classList.add('hidden');
+                } else {
+                    showSettings();
+                }
+            });
+            menuContent.appendChild(backButton);
+            
+            // 显示菜单
+            settingsMenu.innerHTML = '';
+            settingsMenu.appendChild(menuContent);
+            settingsMenu.classList.remove('hidden');
+            
+            if (gameState.currentScreen === 'start') {
+                startScreen.classList.add('hidden');
+            }
+        }
+        
+        // 读取游戏
+        function loadGame(slotIndex) {
+            const saveData = gameState.saveSlots[slotIndex];
+            if (!saveData) return;
+            
+            // 恢复游戏状态
+            gameState.playerName = saveData.playerName;
+            gameState.currentMap = saveData.currentMap;
+            gameState.characterPosition = saveData.characterPosition;
+            gameState.inventory = saveData.inventory;
+            gameState.flags = saveData.flags;
+            gameState.currentDialogue = null;
+            gameState.dialogueIndex = 0;
+            
+            // 显示游戏界面
+            gameState.currentScreen = 'game';
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            settingsMenu.classList.add('hidden');
+            
+            // 绘制游戏
+            drawGame();
+            
+            // 继续游戏循环
+            requestAnimationFrame(updateGame);
+        }
+        
+        // 加载存档槽
+        function loadSaveSlots() {
+            const savedSlots = localStorage.getItem('whiteTowerSaveSlots');
+            if (savedSlots) {
+                gameState.saveSlots = JSON.parse(savedSlots);
+            }
+        }
+        
+        // 返回标题
+        function returnToTitle() {
+            gameState.currentScreen = 'start';
+            startScreen.classList.remove('hidden');
+            gameScreen.classList.add('hidden');
+            settingsMenu.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+        }
+        
+        // 显示结算界面
+        function showResult(title, message) {
+            resultTitle.textContent = title;
+            resultMessage.textContent = message;
+            resultScreen.classList.remove('hidden');
+        }
+        
+        // 继续游戏
+        function continueGame() {
+            resultScreen.classList.add('hidden');
+            returnToTitle();
+        }
+        
+        // 重新开始
+        function restartGame() {
+            resultScreen.classList.add('hidden');
+            startNewGame();
+        }
+        
+        // 启动游戏
+        window.addEventListener('load', initGame);
+    </script>
+</body>
+</html>
