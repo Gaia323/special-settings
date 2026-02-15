@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>矿泉水瓶收藏网 - 探索全国各地不同矿泉水瓶</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 统一的 Tailwind 配置 - 包豪斯风格 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF0000', // 包豪斯红色
+                        secondary: '#0000FF', // 包豪斯蓝色
+                        accent: '#FFD700', // 包豪斯黄色
+                        light: '#FFFFFF',
+                        dark: '#000000'
+                    },
+                    fontFamily: {
+                        sans: ['Helvetica', 'Arial', 'sans-serif'], // 无衬线字体，符合包豪斯风格
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-in-out',
+                        'slide-in': 'slideIn 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                    },
+                    gridTemplateColumns: {
+                        'bauhaus': 'repeat(auto-fit, minmax(300px, 1fr))',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .masonry-grid {
+                column-count: 1;
+                column-gap: 1.5rem;
+            }
+            @screen sm {
+                .masonry-grid {
+                    column-count: 2;
+                }
+            }
+            @screen md {
+                .masonry-grid {
+                    column-count: 3;
+                }
+            }
+            @screen lg {
+                .masonry-grid {
+                    column-count: 3;
+                }
+            }
+            .masonry-item {
+                break-inside: avoid;
+                margin-bottom: 1.5rem;
+            }
+            .bottle-card-hover {
+                transition: all 0.3s ease;
+            }
+            .bottle-card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 0 0 2px theme('colors.primary');
+            }
+            .filter-active {
+                @apply bg-primary text-white;
+            }
+            .bauhaus-border {
+                border: 2px solid theme('colors.dark');
+            }
+            .bauhaus-btn {
+                @apply relative overflow-hidden transition-all duration-300 transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+            }
+            .bauhaus-input {
+                @apply border-2 border-black focus:border-primary focus:ring-0;
+            }
+            .bauhaus-card {
+                @apply border-2 border-black transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)];
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 导航栏 - 包豪斯风格 -->
+    <nav class="bg-white border-b-4 border-black sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-primary flex items-center justify-center">
+                    <i class="fa fa-tint text-white text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold text-black tracking-wider">矿泉水瓶收藏网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-black hover:text-primary transition-colors font-medium tracking-wide" id="nav-home">首页</a>
+                <a href="#" class="text-black hover:text-primary transition-colors font-medium tracking-wide" id="nav-popular">热门收藏</a>
+                <a href="#" class="text-black hover:text-primary transition-colors font-medium tracking-wide" id="nav-regions">地区分类</a>
+                <a href="#" class="text-black hover:text-primary transition-colors font-medium tracking-wide" id="nav-about">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="upload-btn" class="bg-primary text-white px-4 py-2 border-2 border-black bauhaus-btn flex items-center">
+                    <i class="fa fa-upload mr-2"></i>
+                    <span class="hidden sm:inline">上传瓶子</span>
+                </button>
+                <button id="mobile-menu-btn" class="md:hidden text-black hover:text-primary">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200 animate-fade-in">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">首页</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">热门收藏</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">地区分类</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">关于我们</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 - 包豪斯风格 -->
+    <section class="bg-white py-16 md:py-24 border-b-4 border-black">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="animate-slide-in">
+                    <div class="inline-block bg-primary text-white px-3 py-1 mb-4 text-sm font-bold tracking-wider">矿泉水瓶收藏</div>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-6 text-black leading-tight">探索全国<br>不同矿泉水瓶</h2>
+                    <p class="text-lg md:text-xl mb-8 text-gray-800 max-w-lg">发现各种形状、颜色、状态的矿泉水瓶，分享你的收藏，了解矿泉水文化</p>
+                    <div class="relative max-w-md">
+                        <input type="text" id="search-input" placeholder="搜索矿泉水瓶品牌、地区或特征..." 
+                            class="w-full px-4 py-3 bauhaus-input">
+                        <button id="search-btn" class="absolute right-0 top-0 bg-black text-white px-4 py-3 bauhaus-btn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 animate-fade-in">
+                    <div class="bg-secondary h-40 flex items-center justify-center">
+                        <i class="fa fa-tint text-white text-5xl"></i>
+                    </div>
+                    <div class="bg-accent h-40 flex items-center justify-center">
+                        <i class="fa fa-bottle text-black text-5xl"></i>
+                    </div>
+                    <div class="bg-primary h-40 flex items-center justify-center">
+                        <i class="fa fa-collection text-white text-5xl"></i>
+                    </div>
+                    <div class="bg-white border-4 border-black h-40 flex items-center justify-center">
+                        <i class="fa fa-camera text-black text-5xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 筛选区域 - 包豪斯风格 -->
+    <section class="py-8 bg-light border-b-4 border-black">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap items-center justify-between gap-6">
+                <div class="flex flex-wrap items-center gap-4">
+                    <span class="text-black font-bold text-lg">筛选:</span>
+                    <div class="flex flex-wrap gap-3" id="filter-container">
+                        <button class="filter-btn filter-active px-4 py-2 text-sm border-2 border-black hover:bg-gray-100 transition-colors" data-filter="all">全部</button>
+                        <button class="filter-btn px-4 py-2 text-sm border-2 border-black hover:bg-gray-100 transition-colors" data-filter="plastic">塑料瓶</button>
+                        <button class="filter-btn px-4 py-2 text-sm border-2 border-black hover:bg-gray-100 transition-colors" data-filter="glass">玻璃瓶</button>
+                        <button class="filter-btn px-4 py-2 text-sm border-2 border-black hover:bg-gray-100 transition-colors" data-filter="special">特殊形状</button>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-4">
+                    <span class="text-black font-bold text-lg">排序:</span>
+                    <select id="sort-select" class="px-4 py-2 text-sm border-2 border-black bauhaus-input">
+                        <option value="newest">最新上传</option>
+                        <option value="popular">最受欢迎</option>
+                        <option value="name-asc">名称 A-Z</option>
+                        <option value="name-desc">名称 Z-A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 地区标签 - 包豪斯风格 -->
+        <div class="mb-10 overflow-x-auto">
+            <div class="flex gap-4 pb-4 min-w-max">
+                <button class="region-btn filter-active whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="all">全国</button>
+                <button class="region-btn whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="north">华北地区</button>
+                <button class="region-btn whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="east">华东地区</button>
+                <button class="region-btn whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="south">华南地区</button>
+                <button class="region-btn whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="central">华中地区</button>
+                <button class="region-btn whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="southwest">西南地区</button>
+                <button class="region-btn whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="northwest">西北地区</button>
+                <button class="region-btn whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="northeast">东北地区</button>
+                <button class="region-btn whitespace-nowrap px-6 py-3 text-sm border-2 border-black hover:bg-gray-100 transition-colors font-medium" data-region="imported">进口品牌</button>
+            </div>
+        </div>
+
+        <!-- 矿泉水瓶瀑布流 -->
+        <div class="masonry-grid" id="bottle-container">
+            <!-- 瓶子卡片将通过JavaScript动态生成 -->
+        </div>
+
+        <!-- 加载更多按钮 -->
+        <div class="text-center mt-10">
+            <button id="load-more-btn" class="bg-white hover:bg-gray-100 text-gray-800 px-6 py-3 rounded-md border border-gray-300 transition-colors flex items-center mx-auto">
+                <i class="fa fa-refresh mr-2"></i>
+                加载更多
+            </button>
+        </div>
+    </main>
+
+    <!-- 页脚 - 包豪斯风格 -->
+    <footer class="bg-black text-white py-16 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div>
+                    <div class="w-16 h-16 bg-primary flex items-center justify-center mb-6">
+                        <i class="fa fa-tint text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-6">矿泉水瓶收藏网</h3>
+                    <p class="text-gray-400">探索全国各地不同矿泉水瓶，分享你的收藏，了解矿泉水文化</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6 uppercase tracking-wider">快速链接</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="#" class="hover:text-primary transition-colors text-lg">首页</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors text-lg">热门收藏</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors text-lg">地区分类</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors text-lg">关于我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6 uppercase tracking-wider">联系我们</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fa fa-envelope text-primary mt-1 mr-4 text-xl"></i>
+                            <span>contact@waterbottle.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-phone text-primary mt-1 mr-4 text-xl"></i>
+                            <span>123-456-7890</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker text-primary mt-1 mr-4 text-xl"></i>
+                            <span>北京市海淀区中关村大街1号</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6 uppercase tracking-wider">关注我们</h4>
+                    <div class="flex space-x-6">
+                        <a href="#" class="bg-white text-black w-12 h-12 flex items-center justify-center text-xl hover:bg-primary hover:text-white transition-colors">
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                        <a href="#" class="bg-white text-black w-12 h-12 flex items-center justify-center text-xl hover:bg-primary hover:text-white transition-colors">
+                            <i class="fa fa-weibo"></i>
+                        </a>
+                        <a href="#" class="bg-white text-black w-12 h-12 flex items-center justify-center text-xl hover:bg-primary hover:text-white transition-colors">
+                            <i class="fa fa-qq"></i>
+                        </a>
+                        <a href="#" class="bg-white text-black w-12 h-12 flex items-center justify-center text-xl hover:bg-primary hover:text-white transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    </div>
+                    <p class="mt-8 text-gray-400">订阅我们的新闻邮件</p>
+                    <div class="mt-4 flex">
+                        <input type="email" placeholder="你的邮箱地址" class="px-4 py-3 bauhaus-input flex-1">
+                        <button class="bg-primary hover:bg-red-600 px-4 py-3 transition-colors bauhaus-btn">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-600">
+                <p class="text-xl">&copy; 2025 矿泉水瓶收藏网 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 上传模态框 - 包豪斯风格 -->
+    <div id="upload-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-none w-full max-w-md mx-4 animate-slide-up border-4 border-black">
+            <div class="flex justify-between items-center border-b-2 border-black px-6 py-4">
+                <h3 class="text-xl font-bold text-black">上传矿泉水瓶图片</h3>
+                <button id="close-upload-modal" class="text-black hover:text-primary text-xl">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="px-6 py-4">
+                <form id="upload-form">
+                    <div class="mb-4">
+                        <label class="block text-black text-sm font-bold mb-2" for="bottle-name">
+                            瓶子名称
+                        </label>
+                        <input type="text" id="bottle-name" class="w-full px-3 py-2 bauhaus-input" placeholder="例如：农夫山泉经典款">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-black text-sm font-bold mb-2" for="bottle-brand">
+                            品牌
+                        </label>
+                        <input type="text" id="bottle-brand" class="w-full px-3 py-2 bauhaus-input" placeholder="例如：农夫山泉">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-black text-sm font-bold mb-2" for="bottle-region">
+                            产地/地区
+                        </label>
+                        <select id="bottle-region" class="w-full px-3 py-2 bauhaus-input">
+                            <option value="">请选择地区</option>
+                            <option value="north">华北地区</option>
+                            <option value="east">华东地区</option>
+                            <option value="south">华南地区</option>
+                            <option value="central">华中地区</option>
+                            <option value="southwest">西南地区</option>
+                            <option value="northwest">西北地区</option>
+                            <option value="northeast">东北地区</option>
+                            <option value="imported">进口品牌</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-black text-sm font-bold mb-2" for="bottle-material">
+                            材质
+                        </label>
+                        <select id="bottle-material" class="w-full px-3 py-2 bauhaus-input">
+                            <option value="">请选择材质</option>
+                            <option value="plastic">塑料</option>
+                            <option value="glass">玻璃</option>
+                            <option value="metal">金属</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-black text-sm font-bold mb-2" for="bottle-description">
+                            描述（可选）
+                        </label>
+                        <textarea id="bottle-description" rows="3" class="w-full px-3 py-2 bauhaus-input" placeholder="描述瓶子的特点、收藏价值等"></textarea>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-black text-sm font-bold mb-2">
+                            上传图片
+                        </label>
+                        <div class="border-2 border-black p-8 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50" id="image-upload-area">
+                            <i class="fa fa-cloud-upload text-5xl text-black mb-4"></i>
+                            <p class="text-black font-medium">点击或拖拽文件到此处上传</p>
+                            <p class="text-gray-600 mt-2">支持 JPG, PNG, GIF 格式，最大 5MB</p>
+                            <input type="file" id="bottle-image" class="hidden" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-6 pt-4">
+                        <button type="button" id="cancel-upload" class="px-6 py-3 border-2 border-black text-black hover:bg-gray-100 transition-colors bauhaus-btn">
+                            取消
+                        </button>
+                        <button type="button" id="submit-upload" class="px-6 py-3 bg-primary hover:bg-red-600 text-white border-2 border-black transition-colors flex items-center bauhaus-btn">
+                            <i class="fa fa-magic mr-3" id="ai-analysis-icon"></i>
+                            <span id="upload-btn-text">AI智能分析并上传</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 瓶子详情模态框 - 包豪斯风格 -->
+    <div id="bottle-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-none w-full max-w-5xl mx-4 max-h-[90vh] overflow-y-auto animate-slide-up border-4 border-black">
+            <div class="flex justify-between items-center border-b-2 border-black px-6 py-4 sticky top-0 bg-white z-10">
+                <h3 class="text-2xl font-bold text-black" id="detail-title">瓶子详情</h3>
+                <button id="close-detail-modal" class="text-black hover:text-primary text-xl">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="px-6 py-4" id="bottle-detail-content">
+                <!-- 瓶子详情内容将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AI分析中模态框 - 包豪斯风格 -->
+    <div id="ai-analysis-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-none w-full max-w-md mx-4 animate-slide-up p-8 text-center border-4 border-black">
+            <div class="mb-8">
+                <div class="inline-block animate-spin h-16 w-16 border-4 border-black border-t-primary"></div>
+            </div>
+            <h3 class="text-2xl font-bold text-black mb-4">AI智能分析中</h3>
+            <p class="text-gray-800 mb-6 text-lg">正在分析瓶子特征、材质和品牌信息...</p>
+            <div class="w-full bg-white border-2 border-black h-4">
+                <div class="bg-primary h-full" id="ai-progress-bar" style="width: 0%"></div>
+            </div>
+            <p class="text-black font-bold mt-4 text-lg" id="ai-progress-text">0%</p>
+        </div>
+    </div>
+
+    <script>
+        // 矿泉水瓶数据
+        const waterBottles = [
+            {
+                id: 1,
+                name: "农夫山泉经典款",
+                brand: "农夫山泉",
+                image: "https://p26-doubao-search-sign.byteimg.com/labis/a056d6a0f096f2d03a821c89fcb8018a~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696550&x-signature=9ASMuLy7KdIN94bEitk8%2FpdeU5w%3D",
+                region: "east",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "550ml",
+                description: "农夫山泉经典款矿泉水瓶，采用透明PET材质，红色瓶盖，瓶身有独特的波浪纹设计，标签为红绿色调，展示了千岛湖的山水图案。",
+                uploadDate: "2025-01-15",
+                views: 1250,
+                likes: 89,
+                comments: [
+                    { user: "水瓶收藏家", content: "经典中的经典，农夫山泉的包装设计真的很有辨识度", date: "2025-01-16" },
+                    { user: "矿泉水爱好者", content: "这个瓶子的握感很好，设计很人性化", date: "2025-01-17" }
+                ]
+            },
+            {
+                id: 2,
+                name: "农夫山泉整箱装",
+                brand: "农夫山泉",
+                image: "https://p3-doubao-search-sign.byteimg.com/labis/21474edce2544c860aa8132a1698f478~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696550&x-signature=i7eR4nzG9IZb8Afi09GjZYGZqvQ%3D",
+                region: "east",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "380ml",
+                description: "农夫山泉380ml*24瓶整箱装，小瓶装设计适合办公、会议等场合使用。",
+                uploadDate: "2025-01-10",
+                views: 980,
+                likes: 67,
+                comments: []
+            },
+            {
+                id: 3,
+                name: "怡宝纯净水",
+                brand: "怡宝",
+                image: "https://p3-doubao-search-sign.byteimg.com/ecom-shop-material/jpeg_m_6655b8752969d8bd4e221c1e67910d23_sx_55404_www800-800~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696550&x-signature=bGFIGn5znOjT9fsCP%2Fmei3zMX3k%3D",
+                region: "south",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "350ml",
+                description: "怡宝纯净水采用优质水源，透明瓶身搭配绿色标签，简洁大方的设计风格。",
+                uploadDate: "2025-01-08",
+                views: 1120,
+                likes: 78,
+                comments: []
+            },
+            {
+                id: 4,
+                name: "怡宝纯净水整箱装",
+                brand: "怡宝",
+                image: "https://p26-doubao-search-sign.byteimg.com/ecom-shop-material/pJnRlTUJ_m_f83a614f05facca90ff8a14d35acb1eb_sx_303081_www800-800~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696550&x-signature=o%2FbeTUIx3EvAARLEvrGECuxsT08%3D",
+                region: "south",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "350ml",
+                description: "怡宝纯净水350ml*12瓶膜包装，经济实惠，适合家庭日常使用。",
+                uploadDate: "2025-01-05",
+                views: 870,
+                likes: 56,
+                comments: []
+            },
+            {
+                id: 5,
+                name: "怡宝4.5L大瓶装",
+                brand: "怡宝",
+                image: "https://p3-doubao-search-sign.byteimg.com/ecom-shop-material/UBMZqjZY_m_bd26b883876ab6cacbeb84e5f503ebc1_sx_160320_www800-800~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696550&x-signature=ZmmE09FqEFtKE1Ze3p2dfuHxEA0%3D",
+                region: "south",
+                material: "plastic",
+                shape: "large",
+                color: "clear",
+                capacity: "4.5L",
+                description: "怡宝4.5L大瓶装纯净水，适合家庭饮用，带有提手设计，方便携带。",
+                uploadDate: "2025-01-03",
+                views: 760,
+                likes: 45,
+                comments: []
+            },
+            {
+                id: 6,
+                name: "百岁山矿泉水",
+                brand: "百岁山",
+                image: "https://p3-doubao-search-sign.byteimg.com/labis/33739205f60ad9ad8da5d013854f0897~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696549&x-signature=SeLFlRXZwaKoi%2FWneIsyObqq9rQ%3D",
+                region: "east",
+                material: "plastic",
+                shape: "special",
+                color: "clear",
+                capacity: "570ml",
+                description: "百岁山矿泉水采用独特的方形瓶身设计，透明PET材质，标签为蓝白红三色，展现高端品质。",
+                uploadDate: "2025-01-12",
+                views: 1340,
+                likes: 92,
+                comments: [
+                    { user: "包装设计师", content: "百岁山的瓶型设计非常独特，很有辨识度", date: "2025-01-13" }
+                ]
+            },
+            {
+                id: 7,
+                name: "百岁山348ml小瓶装",
+                brand: "百岁山",
+                image: "https://p3-doubao-search-sign.byteimg.com/ecom-shop-material/DLzZmePW_m_f4ae4a04fa2281e7ead77e5b1f04204c_sx_351514_www800-800~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696549&x-signature=XF6fCGdQ%2B3RXO5YWnpDVJ9YtXfk%3D",
+                region: "east",
+                material: "plastic",
+                shape: "special",
+                color: "clear",
+                capacity: "348ml",
+                description: "百岁山348ml小瓶装矿泉水，保持了独特的方形瓶身设计，适合随身携带。",
+                uploadDate: "2025-01-09",
+                views: 1050,
+                likes: 73,
+                comments: []
+            },
+            {
+                id: 8,
+                name: "依云天然矿泉水",
+                brand: "依云",
+                image: "https://p26-doubao-search-sign.byteimg.com/ecom-shop-material/jpeg_m_d44f88597b06334e77e7173eb9be8e45_sx_111999_www800-800~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696565&x-signature=thlX2HzuJYUX53guSvpCjDv9DmE%3D",
+                region: "imported",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "500ml",
+                description: "法国进口依云天然矿泉水，采用蓝色瓶盖，瓶身有独特的山脉图案，标签为蓝白红三色，展现法国阿尔卑斯山的纯净水源。",
+                uploadDate: "2025-01-18",
+                views: 1560,
+                likes: 112,
+                comments: [
+                    { user: "进口水爱好者", content: "依云的口感非常好，瓶子设计也很优雅", date: "2025-01-19" },
+                    { user: "收藏家", content: "依云的瓶型虽然简单，但细节处理很到位", date: "2025-01-20" }
+                ]
+            },
+            {
+                id: 9,
+                name: "依云玻璃瓶装",
+                brand: "依云",
+                image: "https://p11-doubao-search-sign.byteimg.com/labis/8184a00ea3015352eab65757b7d7538f~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696565&x-signature=UK389dcZKgaGmjSLmhsCRAlc7us%3D",
+                region: "imported",
+                material: "glass",
+                shape: "special",
+                color: "clear",
+                capacity: "750ml",
+                description: "依云天然矿泉水玻璃瓶750ml装，高端大气，适合正式场合使用，也是收藏的佳品。",
+                uploadDate: "2025-01-14",
+                views: 1420,
+                likes: 103,
+                comments: []
+            },
+            {
+                id: 10,
+                name: "昆仑山矿泉水",
+                brand: "昆仑山",
+                image: "https://p26-doubao-search-sign.byteimg.com/ecom-shop-material/jpeg_m_4f72eabd1788f3e5878cfcfd258e0b33_sx_494979_www800-800~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696565&x-signature=oQt1zE4dVa8%2Fz%2Bo4prqvqPj1%2Boo%3D",
+                region: "southwest",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "500ml",
+                description: "昆仑山天然雪山矿泉水，采用透明PET材质，红色标签，瓶身有山脉图案，展现青藏高原的纯净水源。",
+                uploadDate: "2025-01-11",
+                views: 1280,
+                likes: 87,
+                comments: []
+            },
+            {
+                id: 11,
+                name: "昆仑山矿泉水1.5L装",
+                brand: "昆仑山",
+                image: "https://p11-doubao-search-sign.byteimg.com/labis/image/13bbff75aa5d477ddc56b26b6a43696b~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696565&x-signature=jI4ZvZo5R%2FvElVDWNbDiJ%2FpD68U%3D",
+                region: "southwest",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "1.5L",
+                description: "昆仑山天然雪山矿泉水1.5L大瓶装，适合家庭饮用或商务会议使用。",
+                uploadDate: "2025-01-06",
+                views: 940,
+                likes: 65,
+                comments: []
+            },
+            {
+                id: 12,
+                name: "景田纯净水",
+                brand: "景田",
+                image: "https://p11-doubao-search-sign.byteimg.com/ecom-shop-material/jpeg_m_abbc7ce21f0c81cc0b95bd1d314baa4c_sx_88671_www800-800~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696565&x-signature=5A6pexh0M2bjDsPr%2BlvpGM3WucA%3D",
+                region: "south",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "560ml",
+                description: "景田纯净水采用透明PET材质，蓝色瓶盖，紫色标签，简洁大方的设计风格。",
+                uploadDate: "2025-01-04",
+                views: 890,
+                likes: 59,
+                comments: []
+            },
+            {
+                id: 13,
+                name: "景田4.6L大瓶装",
+                brand: "景田",
+                image: "https://p26-doubao-search-sign.byteimg.com/labis/723224ee187e6385965cac91893cd860~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696565&x-signature=zNIu8hq3%2FV1AOupy5hRiG%2F9ZeKs%3D",
+                region: "south",
+                material: "plastic",
+                shape: "large",
+                color: "clear",
+                capacity: "4.6L",
+                description: "景田纯净水4.6L大瓶装，适合家庭饮用，带有提手设计，方便携带。",
+                uploadDate: "2025-01-02",
+                views: 730,
+                likes: 43,
+                comments: []
+            },
+            {
+                id: 14,
+                name: "农夫山泉380ml装",
+                brand: "农夫山泉",
+                image: "https://p11-doubao-search-sign.byteimg.com/labis/01eb1197259f93e4d12fdc627f38e3a3~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696550&x-signature=lnEguGiW%2FRXjwwLLpImf08FicpE%3D",
+                region: "east",
+                material: "plastic",
+                shape: "standard",
+                color: "clear",
+                capacity: "380ml",
+                description: "农夫山泉380ml小瓶装矿泉水，适合随身携带，方便饮用。",
+                uploadDate: "2025-01-01",
+                views: 1020,
+                likes: 71,
+                comments: []
+            },
+            {
+                id: 15,
+                name: "百岁山1L大瓶装",
+                brand: "百岁山",
+                image: "https://p11-doubao-search-sign.byteimg.com/labis/24aab065d5b417bc23308969ed41fd61~tplv-be4g95zd3a-image.jpeg?lk3s=feb11e32&x-expires=1786696549&x-signature=ATJpbMwyTZIaoCuQl7YsMlY76sk%3D",
+                region: "east",
+                material: "plastic",
+                shape: "special",
+                color: "clear",
+                capacity: "1L",
+                description: "百岁山1L大瓶装矿泉水，保持了独特的方形瓶身设计，适合家庭饮用。",
+                uploadDate: "2024-12-30",
+                views: 960,
+                likes: 68,
+                comments: []
+            }
+        ];
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化页面
+            renderBottles(waterBottles);
+            setupEventListeners();
+        });
+
+        // 渲染矿泉水瓶卡片
+        function renderBottles(bottles) {
+            const container = document.getElementById('bottle-container');
+            container.innerHTML = '';
+
+            if (bottles.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fa fa-search text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 text-lg">没有找到符合条件的矿泉水瓶</p>
+                        <p class="text-gray-400 mt-2">尝试调整筛选条件或搜索其他关键词</p>
+                    </div>
+                `;
+                return;
+            }
+
+            bottles.forEach(bottle => {
+                const bottleCard = document.createElement('div');
+                bottleCard.className = 'masonry-item bottle-card-hover bg-white bauhaus-card';
+                bottleCard.dataset.id = bottle.id;
+                bottleCard.dataset.brand = bottle.brand.toLowerCase();
+                bottleCard.dataset.region = bottle.region;
+                bottleCard.dataset.material = bottle.material;
+                bottleCard.dataset.shape = bottle.shape;
+                bottleCard.dataset.color = bottle.color;
+
+                bottleCard.innerHTML = `
+                    <div class="relative border-b-2 border-black">
+                        <img src="${bottle.image}" alt="${bottle.name}" class="w-full h-64 object-contain bg-gray-50 transition-transform duration-300 hover:scale-105">
+                        <div class="absolute top-4 right-4 bg-black text-white px-3 py-1 text-xs font-bold">
+                            ${bottle.capacity}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-black mb-2">${bottle.name}</h3>
+                        <p class="text-gray-800 mb-4">${bottle.brand}</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-sm text-gray-700">
+                                <i class="fa fa-eye mr-2"></i>
+                                <span>${bottle.views}</span>
+                                <i class="fa fa-heart ml-4 mr-2 text-primary"></i>
+                                <span>${bottle.likes}</span>
+                            </div>
+                            <button class="view-details-btn bg-black text-white px-3 py-1 text-sm bauhaus-btn">
+                                详情
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(bottleCard);
+
+                // 添加点击事件
+                bottleCard.querySelector('.view-details-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showBottleDetail(bottle.id);
+                });
+
+                bottleCard.addEventListener('click', function() {
+                    showBottleDetail(bottle.id);
+                });
+            });
+        }
+
+        // 显示瓶子详情
+        function showBottleDetail(bottleId) {
+            const bottle = waterBottles.find(b => b.id === bottleId);
+            if (!bottle) return;
+
+            const modal = document.getElementById('bottle-detail-modal');
+            const content = document.getElementById('bottle-detail-content');
+            const title = document.getElementById('detail-title');
+
+            title.textContent = bottle.name;
+
+            // 增加浏览量
+            bottle.views += 1;
+
+            // 生成详情内容
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 p-6">
+                    <div>
+                        <div class="bg-white border-2 border-black p-8 flex items-center justify-center">
+                            <img src="${bottle.image}" alt="${bottle.name}" class="max-h-96 object-contain">
+                        </div>
+                        <div class="mt-8 flex justify-center space-x-6">
+                            <button class="bg-primary hover:bg-red-600 text-white px-6 py-3 border-2 border-black transition-colors flex items-center bauhaus-btn">
+                                <i class="fa fa-heart mr-3"></i>
+                                <span>收藏</span>
+                            </button>
+                            <button class="bg-white hover:bg-gray-100 text-black px-6 py-3 border-2 border-black transition-colors flex items-center bauhaus-btn">
+                                <i class="fa fa-share-alt mr-3"></i>
+                                <span>分享</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="border-2 border-black p-6 mb-8">
+                            <h4 class="text-xl font-bold text-black mb-6 uppercase tracking-wider">基本信息</h4>
+                            <table class="w-full">
+                                <tbody>
+                                    <tr class="border-b-2 border-black">
+                                        <td class="py-4 text-black font-bold w-1/3">品牌</td>
+                                        <td class="py-4 text-black">${bottle.brand}</td>
+                                    </tr>
+                                    <tr class="border-b-2 border-black">
+                                        <td class="py-4 text-black font-bold">容量</td>
+                                        <td class="py-4 text-black">${bottle.capacity}</td>
+                                    </tr>
+                                    <tr class="border-b-2 border-black">
+                                        <td class="py-4 text-black font-bold">材质</td>
+                                        <td class="py-4 text-black">${getMaterialName(bottle.material)}</td>
+                                    </tr>
+                                    <tr class="border-b-2 border-black">
+                                        <td class="py-4 text-black font-bold">形状</td>
+                                        <td class="py-4 text-black">${getShapeName(bottle.shape)}</td>
+                                    </tr>
+                                    <tr class="border-b-2 border-black">
+                                        <td class="py-4 text-black font-bold">颜色</td>
+                                        <td class="py-4 text-black">${getColorName(bottle.color)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-4 text-black font-bold">产地/地区</td>
+                                        <td class="py-4 text-black">${getRegionName(bottle.region)}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="border-2 border-black p-6">
+                            <h4 class="text-xl font-bold text-black mb-6 uppercase tracking-wider">描述</h4>
+                            <p class="text-black text-lg">${bottle.description}</p>
+                        </div>
+                        <div class="mt-6 flex flex-wrap items-center text-gray-800">
+                            <div class="mr-8 mb-2">
+                                <span class="font-bold">上传日期:</span> ${formatDate(bottle.uploadDate)}
+                            </div>
+                            <div class="mr-8 mb-2">
+                                <span><i class="fa fa-eye mr-2"></i></span>
+                                <span>${bottle.views} 次浏览</span>
+                            </div>
+                            <div class="mb-2">
+                                <span><i class="fa fa-heart mr-2 text-primary"></i></span>
+                                <span>${bottle.likes} 人喜欢</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 p-6 border-t-4 border-black">
+                    <h4 class="text-2xl font-bold text-black mb-8 uppercase tracking-wider">用户评论 (${bottle.comments.length})</h4>
+                    ${bottle.comments.length > 0 ? `
+                        <div class="space-y-6">
+                            ${bottle.comments.map(comment => `
+                                <div class="border-2 border-black p-6">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <span class="font-bold text-black text-lg">${comment.user}</span>
+                                        <span class="text-gray-600">${formatDate(comment.date)}</span>
+                                    </div>
+                                    <p class="text-black text-lg">${comment.content}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : `
+                        <div class="text-center py-12 border-2 border-black">
+                            <i class="fa fa-comment-o text-5xl text-gray-300 mb-6"></i>
+                            <p class="text-gray-600 text-xl">暂无评论，成为第一个评论的人吧！</p>
+                        </div>
+                    `}
+                    <div class="mt-10">
+                        <h5 class="font-bold text-black text-xl mb-6">添加评论</h5>
+                        <div class="flex">
+                            <input type="text" placeholder="写下你的评论..." class="flex-1 px-4 py-3 bauhaus-input">
+                            <button class="bg-black hover:bg-gray-800 text-white px-6 py-3 transition-colors bauhaus-btn">
+                                发布
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 显示模态框
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+
+            // 添加收藏按钮点击事件
+            content.querySelector('button.bg-primary').addEventListener('click', function() {
+                bottle.likes += 1;
+                showBottleDetail(bottle.id); // 刷新详情页
+                // 同时更新卡片上的点赞数
+                const card = document.querySelector(`.bottle-card[data-id="${bottle.id}"]`);
+                if (card) {
+                    card.querySelector('.fa-heart + span').textContent = bottle.likes;
+                }
+            });
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 移动端菜单
+            document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // 上传按钮
+            document.getElementById('upload-btn').addEventListener('click', function() {
+                document.getElementById('upload-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            });
+
+            // 关闭上传模态框
+            document.getElementById('close-upload-modal').addEventListener('click', closeUploadModal);
+            document.getElementById('cancel-upload').addEventListener('click', closeUploadModal);
+
+            // 图片上传区域
+            const imageUploadArea = document.getElementById('image-upload-area');
+            const fileInput = document.getElementById('bottle-image');
+            
+            imageUploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            imageUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                imageUploadArea.classList.add('border-primary');
+            });
+
+            imageUploadArea.addEventListener('dragleave', function() {
+                imageUploadArea.classList.remove('border-primary');
+            });
+
+            imageUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                imageUploadArea.classList.remove('border-primary');
+                
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    updateImagePreview(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (this.files.length) {
+                    updateImagePreview(this.files[0]);
+                }
+            });
+
+            // 关闭瓶子详情模态框
+            document.getElementById('close-detail-modal').addEventListener('click', function() {
+                document.getElementById('bottle-detail-modal').classList.add('hidden');
+                document.body.style.overflow = ''; // 恢复背景滚动
+            });
+
+            // 筛选按钮
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的active状态
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('filter-active'));
+                    // 添加当前按钮的active状态
+                    this.classList.add('filter-active');
+                    
+                    // 筛选瓶子
+                    filterBottles();
+                });
+            });
+
+            // 地区按钮
+            document.querySelectorAll('.region-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的active状态
+                    document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('filter-active'));
+                    // 添加当前按钮的active状态
+                    this.classList.add('filter-active');
+                    
+                    // 筛选瓶子
+                    filterBottles();
+                });
+            });
+
+            // 排序选择
+            document.getElementById('sort-select').addEventListener('change', function() {
+                filterBottles();
+            });
+
+            // 搜索按钮
+            document.getElementById('search-btn').addEventListener('click', function() {
+                filterBottles();
+            });
+
+            // 搜索输入框回车
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterBottles();
+                }
+            });
+
+            // 加载更多按钮
+            document.getElementById('load-more-btn').addEventListener('click', function() {
+                // 模拟加载更多
+                this.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 加载中...';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fa fa-refresh mr-2"></i> 加载更多';
+                    alert('已加载全部内容');
+                }, 1000);
+            });
+
+            // AI分析并上传按钮
+            document.getElementById('submit-upload').addEventListener('click', function() {
+                const bottleName = document.getElementById('bottle-name').value.trim();
+                const bottleBrand = document.getElementById('bottle-brand').value.trim();
+                const bottleRegion = document.getElementById('bottle-region').value;
+                const bottleMaterial = document.getElementById('bottle-material').value;
+                const bottleImage = document.getElementById('bottle-image').files[0];
+
+                // 简单验证
+                if (!bottleImage) {
+                    alert('请上传矿泉水瓶图片');
+                    return;
+                }
+
+                if (!bottleName) {
+                    document.getElementById('bottle-name').focus();
+                    return;
+                }
+
+                if (!bottleBrand) {
+                    document.getElementById('bottle-brand').focus();
+                    return;
+                }
+
+                // 显示AI分析模态框
+                const aiModal = document.getElementById('ai-analysis-modal');
+                const progressBar = document.getElementById('ai-progress-bar');
+                const progressText = document.getElementById('ai-progress-text');
+                
+                aiModal.classList.remove('hidden');
+                
+                // 模拟AI分析进度
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 5;
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        
+                        // 延迟关闭模态框并显示成功消息
+                        setTimeout(() => {
+                            aiModal.classList.add('hidden');
+                            closeUploadModal();
+                            
+                            // 如果用户没有填写某些字段，AI会"自动识别"并填充
+                            if (!bottleRegion) {
+                                document.getElementById('bottle-region').value = 'east'; // 示例：AI识别为华东地区
+                            }
+                            
+                            if (!bottleMaterial) {
+                                document.getElementById('bottle-material').value = 'plastic'; // 示例：AI识别为塑料材质
+                            }
+                            
+                            alert('上传成功！AI已自动分析并分类您的矿泉水瓶。');
+                            
+                            // 重置表单
+                            document.getElementById('upload-form').reset();
+                            document.getElementById('image-upload-preview').remove();
+                        }, 500);
+                    }
+                }, 100);
+            });
+
+            // 点击模态框背景关闭模态框
+            window.addEventListener('click', function(e) {
+                const uploadModal = document.getElementById('upload-modal');
+                const detailModal = document.getElementById('bottle-detail-modal');
+                const aiModal = document.getElementById('ai-analysis-modal');
+                
+                if (e.target === uploadModal) {
+                    closeUploadModal();
+                }
+                
+                if (e.target === detailModal) {
+                    detailModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+                
+                if (e.target === aiModal) {
+                    aiModal.classList.add('hidden');
+                }
+            });
+
+            // 导航链接
+            document.getElementById('nav-home').addEventListener('click', function(e) {
+                e.preventDefault();
+                // 重置筛选条件
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('filter-active'));
+                document.querySelector('.filter-btn[data-filter="all"]').classList.add('filter-active');
+                
+                document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('filter-active'));
+                document.querySelector('.region-btn[data-region="all"]').classList.add('filter-active');
+                
+                document.getElementById('sort-select').value = 'newest';
+                document.getElementById('search-input').value = '';
+                
+                filterBottles();
+                
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // 关闭上传模态框
+        function closeUploadModal() {
+            document.getElementById('upload-modal').classList.add('hidden');
+            document.body.style.overflow = ''; // 恢复背景滚动
+        }
+
+        // 更新图片预览
+        function updateImagePreview(file) {
+            const imageUploadArea = document.getElementById('image-upload-area');
+            
+            // 移除之前的预览
+            const existingPreview = document.getElementById('image-upload-preview');
+            if (existingPreview) {
+                existingPreview.remove();
+            }
+            
+            // 创建预览元素
+            const preview = document.createElement('div');
+            preview.id = 'image-upload-preview';
+            preview.className = 'mt-4 relative';
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `
+                    <img src="${e.target.result}" alt="预览图" class="max-h-40 mx-auto">
+                    <button type="button" id="remove-image-preview" class="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                        <i class="fa fa-times"></i>
+                    </button>
+                `;
+                imageUploadArea.appendChild(preview);
+                
+                // 添加移除预览的事件
+                document.getElementById('remove-image-preview').addEventListener('click', function() {
+                    preview.remove();
+                    document.getElementById('bottle-image').value = '';
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 筛选瓶子
+        function filterBottles() {
+            const filterValue = document.querySelector('.filter-btn.filter-active').dataset.filter;
+            const regionValue = document.querySelector('.region-btn.filter-active').dataset.region;
+            const sortValue = document.getElementById('sort-select').value;
+            const searchValue = document.getElementById('search-input').value.toLowerCase().trim();
+            
+            let filteredBottles = [...waterBottles];
+            
+            // 应用筛选
+            if (filterValue !== 'all') {
+                filteredBottles = filteredBottles.filter(bottle => {
+                    if (filterValue === 'plastic' || filterValue === 'glass') {
+                        return bottle.material === filterValue;
+                    }
+                    if (filterValue === 'special') {
+                        return bottle.shape === 'special';
+                    }
+                    return true;
+                });
+            }
+            
+            // 应用地区筛选
+            if (regionValue !== 'all') {
+                filteredBottles = filteredBottles.filter(bottle => bottle.region === regionValue);
+            }
+            
+            // 应用搜索
+            if (searchValue) {
+                filteredBottles = filteredBottles.filter(bottle => 
+                    bottle.name.toLowerCase().includes(searchValue) || 
+                    bottle.brand.toLowerCase().includes(searchValue) ||
+                    bottle.description.toLowerCase().includes(searchValue)
+                );
+            }
+            
+            // 应用排序
+            filteredBottles.sort((a, b) => {
+                if (sortValue === 'newest') {
+                    return new Date(b.uploadDate) - new Date(a.uploadDate);
+                }
+                if (sortValue === 'popular') {
+                    return b.views - a.views;
+                }
+                if (sortValue === 'name-asc') {
+                    return a.name.localeCompare(b.name);
+                }
+                if (sortValue === 'name-desc') {
+                    return b.name.localeCompare(a.name);
+                }
+                return 0;
+            });
+            
+            // 重新渲染瓶子
+            renderBottles(filteredBottles);
+        }
+
+        // 辅助函数：格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        // 辅助函数：获取材质名称
+        function getMaterialName(material) {
+            const materials = {
+                'plastic': '塑料',
+                'glass': '玻璃',
+                'metal': '金属',
+                'other': '其他'
+            };
+            return materials[material] || material;
+        }
+
+        // 辅助函数：获取形状名称
+        function getShapeName(shape) {
+            const shapes = {
+                'standard': '标准',
+                'special': '特殊',
+                'large': '大容量'
+            };
+            return shapes[shape] || shape;
+        }
+
+        // 辅助函数：获取颜色名称
+        function getColorName(color) {
+            const colors = {
+                'clear': '透明',
+                'blue': '蓝色',
+                'green': '绿色',
+                'red': '红色',
+                'other': '其他'
+            };
+            return colors[color] || color;
+        }
+
+        // 辅助函数：获取地区名称
+        function getRegionName(region) {
+            const regions = {
+                'north': '华北地区',
+                'east': '华东地区',
+                'south': '华南地区',
+                'central': '华中地区',
+                'southwest': '西南地区',
+                'northwest': '西北地区',
+                'northeast': '东北地区',
+                'imported': '进口品牌'
+            };
+            return regions[region] || region;
+        }
+    </script>
+</body>
+</html>
